@@ -110,15 +110,15 @@ Request.prototype._addListeners = function(){
 	this.on("end", function(){
 		scope._ended = true;
 	});
-
-	if(this._cb){
-		this.on("data", function(chunk){
-			scope._body = Buffer.concat([scope._body, chunk]);
-		});
-		this.on("end", function(){
+	
+	this.on("data", function(chunk){
+		scope._body = Buffer.concat([scope._body, chunk]);
+	});
+	
+	this.on("end", function(){
+		if(scope._cb)
 			scope._cb(null, scope.response, scope._body);
-		});
-	}
+	});
 
 	this.on("redirect", function(location){
 		var options = scope._options,
